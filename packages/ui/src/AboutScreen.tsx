@@ -45,10 +45,7 @@ export interface AboutScreenProps {
   sections: AboutSection[];
 }
 
-/**
- * Presentational component — hiçbir sabit metin içermez. Çağıran taraf kendi
- * i18n çevirisini yaptıktan sonra profile/sections içine hazır string geçer.
- */
+/** Presentational — metinler i18n çevirisi yapılmış olarak prop'tan gelir. */
 export default function AboutScreen({ profile, sections }: AboutScreenProps) {
   const { colors } = useTheme();
   const styles = getStyles(colors);
@@ -56,7 +53,10 @@ export default function AboutScreen({ profile, sections }: AboutScreenProps) {
   return (
     <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <View style={styles.card}>
-        <Image source={profile.avatar} style={styles.avatar} />
+        <Image
+          source={typeof profile.avatar === 'string' ? { uri: profile.avatar } : profile.avatar}
+          style={styles.avatar}
+        />
         <Text style={styles.name}>{profile.name}</Text>
         <Text style={styles.role}>{profile.role}</Text>
 

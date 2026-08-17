@@ -15,7 +15,6 @@ export type Palette = {
   white: string;
 };
 
-// msarinc, msarinc-blog ve NeLazim'de kullanılan renk token'larının tek kaynağı.
 // primary marka rengi temalar arasında sabit kalır.
 export const PALETTES: Record<ThemeName, Palette> = {
   light: {

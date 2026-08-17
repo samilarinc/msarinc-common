@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import { Sun, Moon, Zap, type LucideIcon } from 'lucide-react-native';
 import { ThemeName } from '@msarinc/theme-core';
 import { useTheme } from './ThemeProvider';
@@ -14,7 +14,6 @@ export interface ThemeToggleLabels {
   light: string;
   dark: string;
   lightsOut: string;
-  /** {current} ve {next} yer tutucularını çağıran taraf kendi t()'siyle doldurur. */
   accessibilityLabel: (current: string, next: string) => string;
 }
 
@@ -26,12 +25,17 @@ const DEFAULT_LABELS: ThemeToggleLabels = {
 };
 
 export interface ThemeToggleProps {
+  /** Belirtilmezse genişliğe göre otomatik seçilir (bkz. breakpoint). */
   compact?: boolean;
+  /** compact otomatik seçilirken kullanılan genişlik eşiği (px). Varsayılan: 640. */
+  breakpoint?: number;
   labels?: Partial<ThemeToggleLabels>;
 }
 
-export default function ThemeToggle({ compact = false, labels }: ThemeToggleProps) {
+export default function ThemeToggle({ compact, breakpoint = 640, labels }: ThemeToggleProps) {
   const { theme, setTheme, colors } = useTheme();
+  const { width } = useWindowDimensions();
+  const isCompact = compact ?? width < breakpoint;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
 
   const OPTIONS = THEME_ICONS.map((o) => ({
@@ -40,7 +44,7 @@ export default function ThemeToggle({ compact = false, labels }: ThemeToggleProp
       o.name === 'light' ? resolvedLabels.light : o.name === 'dark' ? resolvedLabels.dark : resolvedLabels.lightsOut,
   }));
 
-  if (compact) {
+  if (isCompact) {
     const currentIndex = OPTIONS.findIndex((o) => o.name === theme);
     const current = OPTIONS[currentIndex];
     const next = OPTIONS[(currentIndex + 1) % OPTIONS.length];
@@ -78,16 +82,16 @@ export default function ThemeToggle({ compact = false, labels }: ThemeToggleProp
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    gap: 8,
-    padding: 4,
+    gap: 2,
+    padding: 3,
     borderRadius: 999,
     borderWidth: 1,
     alignSelf: 'flex-start',
   },
   button: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     shadowOffset: { width: 0, height: 2 },

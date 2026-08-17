@@ -1,16 +1,19 @@
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 import { Mail, Github } from 'lucide-react-native';
-import { ThemeProvider, ThemeToggle, AboutScreen, useTheme } from '@msarinc/ui';
+import { ThemeProvider, ThemeToggle, AboutScreen, useTheme, type Palette } from '@msarinc/ui';
 import './src/i18n';
 
-function LangSwitch() {
+function LangSwitch({ colors }: { colors: Palette }) {
   const { i18n } = useTranslation();
   return (
-    <Text style={styles.langBtn} onPress={() => i18n.changeLanguage(i18n.language === 'tr' ? 'en' : 'tr')}>
-      {i18n.language === 'tr' ? 'EN' : 'TR'}
-    </Text>
+    <TouchableOpacity
+      style={[styles.langBtn, { backgroundColor: colors.surface, borderColor: colors.border }]}
+      onPress={() => i18n.changeLanguage(i18n.language === 'tr' ? 'en' : 'tr')}
+    >
+      <Text style={{ color: colors.text, fontWeight: '600' }}>{i18n.language === 'tr' ? 'EN' : 'TR'}</Text>
+    </TouchableOpacity>
   );
 }
 
@@ -25,9 +28,8 @@ function Demo() {
       <View style={styles.header}>
         <Text style={[styles.title, { color: colors.text }]}>{t('title')}</Text>
         <View style={styles.headerActions}>
-          <LangSwitch />
+          <LangSwitch colors={colors} />
           <ThemeToggle
-            compact
             labels={{
               light: tc('theme.light'),
               dark: tc('theme.dark'),

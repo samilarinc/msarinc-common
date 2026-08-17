@@ -15,14 +15,9 @@ export interface ThemeStore {
   getTheme(): ThemeName;
   setTheme(theme: ThemeName): void | Promise<void>;
   getColors(): Palette;
-  /** Kaydedilmiş temayı storage'dan okuyup onChange'i tetikler (async storage'lar için). */
   hydrate(): void | Promise<void>;
 }
 
-/**
- * Web (localStorage, senkron) ve native (AsyncStorage, asenkron) ThemeProvider'ların
- * ortak temelini oluşturan framework-agnostic tema state mantığı.
- */
 export function createThemeStore(options: ThemeStoreOptions): ThemeStore {
   const { storage, onChange } = options;
   let current: ThemeName = options.defaultTheme ?? 'light';
