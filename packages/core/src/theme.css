@@ -1,0 +1,42 @@
+/*
+ * Framework'ten bağımsız CSS custom property karşılığı.
+ * Renk değerleri src/palettes.ts ile senkron tutulmalıdır.
+ */
+[data-theme='light'] {
+  --bg-color: #f8f9fa;
+  --text-color: #2c3e50;
+  --text-muted: #7f8c8d;
+  --primary-color: #26a68a;
+  --primary-hover: #1e866f;
+  --card-bg: #ffffff;
+  --card-border: #e9ecef;
+  --header-bg: rgba(255, 255, 255, 0.9);
+  --danger-color: #d32f2f;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='dark'] {
+  --bg-color: #1a1a2e;
+  --text-color: #e6e6e6;
+  --text-muted: #94a3b8;
+  --primary-color: #26a68a;
+  --primary-hover: #1e866f;
+  --card-bg: #16213e;
+  --card-border: #24344d;
+  --header-bg: rgba(26, 26, 46, 0.9);
+  --danger-color: #ef5350;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='lights-out'] {
+  --bg-color: #000000;
+  --text-color: #ffffff;
+  --text-muted: #a1a1aa;
+  --primary-color: #26a68a;
+  --primary-hover: #1e866f;
+  --card-bg: #0a0a0a;
+  --card-border: #1a1a1a;
+  --header-bg: rgba(0, 0, 0, 0.9);
+  --danger-color: #ef5350;
+  --shadow: 0 0 0 1px #262626;
+}

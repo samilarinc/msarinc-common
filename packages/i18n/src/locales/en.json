@@ -1,0 +1,16 @@
+{
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "lights_out": "Lights Out",
+    "accessibility_label": "Theme: {{current}}. Tap to switch, next: {{next}}"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close"
+  }
+}
