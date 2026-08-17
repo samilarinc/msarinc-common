@@ -1,25 +1,18 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 import { Mail, Github } from 'lucide-react-native';
-import { ThemeProvider, ThemeToggle, AboutScreen, useTheme, type Palette } from '@msarinc/ui';
+import { ThemeProvider, ThemeToggle, LanguageSelector, AboutScreen, useTheme } from '@msarinc/ui';
 import './src/i18n';
 
-function LangSwitch({ colors }: { colors: Palette }) {
-  const { i18n } = useTranslation();
-  return (
-    <TouchableOpacity
-      style={[styles.langBtn, { backgroundColor: colors.surface, borderColor: colors.border }]}
-      onPress={() => i18n.changeLanguage(i18n.language === 'tr' ? 'en' : 'tr')}
-    >
-      <Text style={{ color: colors.text, fontWeight: '600' }}>{i18n.language === 'tr' ? 'EN' : 'TR'}</Text>
-    </TouchableOpacity>
-  );
-}
+const LANGUAGES = [
+  { code: 'tr', label: 'Türkçe' },
+  { code: 'en', label: 'English' },
+];
 
 function Demo() {
   const { colors } = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { t: tc } = useTranslation('common');
 
   return (
@@ -28,7 +21,11 @@ function Demo() {
       <View style={styles.header}>
         <Text style={[styles.title, { color: colors.text }]}>{t('title')}</Text>
         <View style={styles.headerActions}>
-          <LangSwitch colors={colors} />
+          <LanguageSelector
+            value={i18n.language}
+            languages={LANGUAGES}
+            onChange={(code) => i18n.changeLanguage(code)}
+          />
           <ThemeToggle
             labels={{
               light: tc('theme.light'),
@@ -80,7 +77,6 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   headerActions: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  langBtn: { fontWeight: '600', paddingHorizontal: 8 },
   title: { fontSize: 18, fontWeight: '700' },
   subtitle: { fontSize: 13, paddingHorizontal: 20, marginTop: 4, marginBottom: 12 },
 });
