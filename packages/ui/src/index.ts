@@ -6,5 +6,7 @@ export { default as AboutScreen } from './AboutScreen';
 export type { AboutScreenProps, AboutProfile, AboutContact, AboutSection, AboutUpdate } from './AboutScreen';
 export { default as LanguageSelector } from './LanguageSelector';
 export type { LanguageSelectorProps, LanguageOption } from './LanguageSelector';
+export { default as FontSizeToggle } from './FontSizeToggle';
+export type { FontSizeToggleProps, FontSizeToggleLabels } from './FontSizeToggle';
 export { PALETTES, THEME_NAMES } from '@msarinc/theme-core';
 export type { Palette, ThemeName } from '@msarinc/theme-core';
