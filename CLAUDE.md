@@ -10,6 +10,7 @@ msarinc'in kişisel projeleri arasında paylaşılan tema/i18n/UI kütüphanesi.
 - `apps/demo` tek bir Expo app'tir (hem native hem web test için); ayrı bir web-demo yoktur.
 - Bu repoda **henüz** `msarinc`/`msarinc-blog`/`NeLazim`/`QuranApp`'a entegrasyon (submodule, rewrite) yapılmadı — bu ayrı bir aşama, kendiliğinden başlatma.
 - `packages/firebase` (`@msarinc/firebase`): Firebase app/auth/Firestore init'i, Google SSO (`AuthProvider`/`useAuth`, NeLazim'deki `AuthContext` deseninin genelleştirilmiş hali) ve `useFirestoreCollection`/`addFirestoreDoc` gibi genel Firestore yardımcılarını export eder. Firebase config'i kendi tutmaz — her tüketen proje `initFirebase(loadFirebaseConfigFromEnv())` ile kendi `EXPO_PUBLIC_FIREBASE_*`/`EXPO_PUBLIC_GOOGLE_*` env değerlerini verir (bkz. msarinc-home `src/services/firebase.ts`).
+- `packages/supabase` (`@msarinc/supabase`): Firebase→Supabase kademeli geçişin ilk adımı. Şimdilik sadece Storage sarmalayıcısı (`initSupabase`, `uploadImage`, `deleteImage`); auth/Firestore hâlâ Firebase'de. Config yine tüketen projenin `EXPO_PUBLIC_SUPABASE_*` env değerlerinden gelir.
 
 ## Komutlar
 
