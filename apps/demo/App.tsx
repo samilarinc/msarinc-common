@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
-import { Mail, Github } from 'lucide-react-native';
+import { Mail, GitBranch } from 'lucide-react-native';
 import { ThemeProvider, ThemeToggle, LanguageSelector, AboutScreen, useTheme } from '@msarinc/ui';
 import './src/i18n';
 
@@ -44,7 +44,7 @@ function Demo() {
           role: t('role'),
           contacts: [
             { icon: Mail, label: 'msarinc@gmail.com', url: 'mailto:msarinc@gmail.com' },
-            { icon: Github, label: 'github.com/samilarinc', url: 'https://github.com/samilarinc' },
+            { icon: GitBranch, label: 'github.com/samilarinc', url: 'https://github.com/samilarinc' },
           ],
         }}
         sections={[
