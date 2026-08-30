@@ -20,9 +20,15 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export interface ThemeProviderProps {
   children: ReactNode;
   defaultTheme?: ThemeName;
+  /** Tüketen proje kendi marka paletini vermek isterse (bkz. ciphereng-frontend). Verilmezse theme-core'un PALETTES'i kullanılır. */
+  palettes?: Record<ThemeName, Palette>;
 }
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, defaultTheme = 'light' }) => {
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({
+  children,
+  defaultTheme = 'light',
+  palettes = PALETTES,
+}) => {
   const [theme, setThemeState] = useState<ThemeName>(defaultTheme);
 
   const store = useMemo(
@@ -44,7 +50,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, defaultT
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, colors: PALETTES[theme], setTheme }}>
+    <ThemeContext.Provider value={{ theme, colors: palettes[theme], setTheme }}>
       {children}
     </ThemeContext.Provider>
   );
