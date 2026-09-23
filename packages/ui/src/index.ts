@@ -12,3 +12,6 @@ export { default as HeaderNavButtons } from './HeaderNavButtons';
 export type { HeaderNavButtonsProps, HeaderNavButtonsLabels } from './HeaderNavButtons';
 export { PALETTES, THEME_NAMES } from '@msarinc/theme-core';
 export type { Palette, ThemeName } from '@msarinc/theme-core';
+export { createBaseStyles, paletteToBaseStyleColors, SHADOW } from './createBaseStyles';
+export type { BaseStyleColors, BaseStyles } from './createBaseStyles';
+export { SPACING, RADIUS, FONT_SIZES } from '@msarinc/theme-core';
