@@ -10,6 +10,8 @@ export { default as FontSizeToggle } from './FontSizeToggle';
 export type { FontSizeToggleProps, FontSizeToggleLabels } from './FontSizeToggle';
 export { default as HeaderNavButtons } from './HeaderNavButtons';
 export type { HeaderNavButtonsProps, HeaderNavButtonsLabels } from './HeaderNavButtons';
+export { default as HeaderMenu } from './HeaderMenu';
+export type { HeaderMenuProps } from './HeaderMenu';
 export { PALETTES, THEME_NAMES } from '@msarinc/theme-core';
 export type { Palette, ThemeName } from '@msarinc/theme-core';
 export { createBaseStyles, paletteToBaseStyleColors, SHADOW } from './createBaseStyles';
