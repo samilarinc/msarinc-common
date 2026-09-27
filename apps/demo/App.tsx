@@ -51,7 +51,7 @@ function Demo() {
           { title: t('aboutTitle'), text: t('aboutText') },
           {
             title: t('updatesTitle'),
-            updates: [{ date: '2026-08-17', bullets: ['İlk demo ekranı eklendi.'] }],
+            updates: [{ date: '2026-08-17', bullets: ['Added the first demo screen.'] }],
           },
         ]}
       />

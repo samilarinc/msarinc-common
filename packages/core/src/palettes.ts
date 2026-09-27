@@ -15,7 +15,7 @@ export type Palette = {
   white: string;
 };
 
-// primary marka rengi temalar arasında sabit kalır.
+// The primary brand color is the same in every theme.
 export const PALETTES: Record<ThemeName, Palette> = {
   light: {
     background: '#f8f9fa',

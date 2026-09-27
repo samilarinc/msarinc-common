@@ -3,17 +3,13 @@ import type { SupabaseEnvConfig } from './config';
 
 let client: SupabaseClient | null = null;
 
-/**
- * Uygulama başlangıcında bir kez çağrılır (örn. App.tsx içinde import edilen
- * bir services/supabase.ts dosyasından). Aynı config ile tekrar çağrılması
- * güvenlidir; zaten kurulmuş client'ı döndürür.
- */
+/** Call once at startup. Calling it again is safe and returns the existing client. */
 export function initSupabase(config: SupabaseEnvConfig): SupabaseClient {
   if (client) return client;
 
   if (!config.url || !config.anonKey) {
     console.warn(
-      '[@msarinc/supabase] Supabase config eksik. .env dosyanıza EXPO_PUBLIC_SUPABASE_* değerlerini ekleyin.'
+      '[@msarinc/supabase] Supabase config is missing. Add the EXPO_PUBLIC_SUPABASE_* values to your .env file.'
     );
   }
 
@@ -23,7 +19,7 @@ export function initSupabase(config: SupabaseEnvConfig): SupabaseClient {
 
 export function getSupabaseClient(): SupabaseClient {
   if (!client) {
-    throw new Error('[@msarinc/supabase] initSupabase() henüz çağrılmadı.');
+    throw new Error('[@msarinc/supabase] initSupabase() has not been called yet.');
   }
   return client;
 }

@@ -26,12 +26,12 @@ const missingInTr = [...enKeys].filter((k) => !trKeys.has(k));
 
 if (missingInEn.length || missingInTr.length) {
   if (missingInEn.length) {
-    console.error('en.json içinde eksik anahtarlar:', missingInEn);
+    console.error('Keys missing from en.json:', missingInEn);
   }
   if (missingInTr.length) {
-    console.error('tr.json içinde eksik anahtarlar:', missingInTr);
+    console.error('Keys missing from tr.json:', missingInTr);
   }
   process.exit(1);
 }
 
-console.log(`Key parity OK (${trKeys.size} anahtar, tr/en eşleşiyor).`);
+console.log(`Key parity OK (${trKeys.size} keys, tr/en match).`);

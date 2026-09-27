@@ -1,6 +1,6 @@
 /*
- * Framework'ten bağımsız CSS custom property karşılığı.
- * Renk değerleri src/palettes.ts ile senkron tutulmalıdır.
+ * The palettes as plain CSS custom properties, for pages outside React.
+ * Keep the values in sync with src/palettes.ts.
  */
 [data-theme='light'] {
   --bg-color: #f8f9fa;

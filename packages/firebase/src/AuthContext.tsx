@@ -35,14 +35,13 @@ export interface AuthContextValue<TProfile extends FirebaseUserProfile = Firebas
 
 export interface AuthProviderProps<TProfile extends FirebaseUserProfile = FirebaseUserProfile> {
   children: ReactNode;
-  /** Deep link scheme, app.json/app.config.js içindeki "scheme" ile aynı olmalı. */
+  /** Deep link scheme; must match "scheme" in app.json / app.config.js. */
   scheme: string;
   googleClientIds: GoogleClientIds;
-  /** Kullanıcı profillerinin tutulacağı koleksiyon adı. Varsayılan: 'users'. */
+  /** Default: 'users'. */
   usersCollection?: string;
-  /** İlk girişte varsayılan profile ek alanlar eklemek için. */
+  /** Builds the profile document created on first sign-in. */
   buildProfile?: (user: User) => TProfile;
-  /** İsim boş geldiğinde kullanılacak metin (i18n). */
   unnamedUserLabel?: string;
 }
 
@@ -54,16 +53,16 @@ export function AuthProvider<TProfile extends FirebaseUserProfile = FirebaseUser
   googleClientIds,
   usersCollection = 'users',
   buildProfile,
-  unnamedUserLabel = 'İsimsiz kullanıcı',
+  unnamedUserLabel = 'Unnamed user',
 }: AuthProviderProps<TProfile>) {
   const { auth, db, googleProvider } = getFirebaseClient();
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<TProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // expo-auth-session zorunlu tutuyor: mevcut platform için client id tanımlı olmalı,
-  // web'de gerçek akış signInWithPopup olduğundan bu hook hiç kullanılmıyor ama yine de
-  // render sırasında doğrulanıyor — boş string ile satisfy edip crash'i önlüyoruz.
+  // expo-auth-session requires a client id for the current platform at render time.
+  // On web sign-in goes through signInWithPopup and this hook is never used, so an
+  // empty string satisfies the check without crashing.
   const [, response, promptAsync] = Google.useAuthRequest({
     webClientId: googleClientIds.web ?? '',
     iosClientId: googleClientIds.ios ?? '',

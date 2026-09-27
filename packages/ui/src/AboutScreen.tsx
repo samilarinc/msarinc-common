@@ -20,7 +20,7 @@ export interface AboutContact {
 }
 
 export interface AboutProfile {
-  /** Görsel URL'i (string) veya React Native ImageSourcePropType (örn. require(...)) kabul eder. */
+  /** A URL string or an ImageSourcePropType such as require(...). */
   avatar: string | ImageSourcePropType;
   name: string;
   role: string;
@@ -34,9 +34,7 @@ export interface AboutUpdate {
 
 export interface AboutSection {
   title: string;
-  /** Düz paragraf bölümü (örn. "Proje Hakkında"). */
   text?: string;
-  /** Güncelleme notları bölümü (örn. "Sürüm Notları"). */
   updates?: AboutUpdate[];
 }
 
@@ -45,7 +43,7 @@ export interface AboutScreenProps {
   sections: AboutSection[];
 }
 
-/** Presentational — metinler i18n çevirisi yapılmış olarak prop'tan gelir. */
+/** Presentational only: every text comes in through props, already translated. */
 export default function AboutScreen({ profile, sections }: AboutScreenProps) {
   const { colors } = useTheme();
   const styles = getStyles(colors);

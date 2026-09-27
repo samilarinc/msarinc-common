@@ -1,31 +1,32 @@
 # CLAUDE.md
 
-msarinc'in kişisel projeleri arasında paylaşılan tema/i18n/UI kütüphanesi. npm workspaces monorepo.
+Theme, i18n and UI library shared across msarinc's personal projects. npm workspaces monorepo.
 
-## Mimari kararlar (sorgulamadan tekrar etme)
+## Architecture decisions (don't relitigate)
 
-- **Sadece Expo/React Native, Vite/DOM paketi yok.** Tüketici projeler (msarinc, msarinc-blog) zamanla Expo'ya taşınacak; bu yüzden kütüphane baştan `react-native-web` üzerine kurulu tek bir UI paketi (`packages/ui`) olarak tasarlandı. Web için ayrı bir paket eklemeyi önerme.
-- Renk paleti ve tema state mantığı `packages/core`'da framework-agnostic tutulur (React'a bağımlı değil).
-- `packages/i18n` sadece statik kaynak (JSON + tip) export eder, kendi i18next instance'ı kurmaz — tüketen proje kendi i18n.init()'ine `common` namespace olarak ekler.
-- `apps/demo` tek bir Expo app'tir (hem native hem web test için); ayrı bir web-demo yoktur.
-- Bu repoda **henüz** `msarinc`/`msarinc-blog`/`NeLazim`/`QuranApp`'a entegrasyon (submodule, rewrite) yapılmadı — bu ayrı bir aşama, kendiliğinden başlatma.
-- `packages/firebase` (`@msarinc/firebase`): Firebase app/auth/Firestore init'i, Google SSO (`AuthProvider`/`useAuth`, NeLazim'deki `AuthContext` deseninin genelleştirilmiş hali) ve `useFirestoreCollection`/`addFirestoreDoc` gibi genel Firestore yardımcılarını export eder. Firebase config'i kendi tutmaz — her tüketen proje `initFirebase(loadFirebaseConfigFromEnv())` ile kendi `EXPO_PUBLIC_FIREBASE_*`/`EXPO_PUBLIC_GOOGLE_*` env değerlerini verir (bkz. msarinc-home `src/services/firebase.ts`).
-- `packages/supabase` (`@msarinc/supabase`): Firebase→Supabase kademeli geçişin ilk adımı. Şimdilik sadece Storage sarmalayıcısı (`initSupabase`, `uploadImage`, `deleteImage`); auth/Firestore hâlâ Firebase'de. Config yine tüketen projenin `EXPO_PUBLIC_SUPABASE_*` env değerlerinden gelir.
+- **Expo / React Native only, no Vite/DOM package.** Consuming projects are moving to Expo, so the library is a single UI package (`packages/ui`) built on `react-native-web`. Don't suggest adding a separate web package.
+- Palettes and theme state logic live in `packages/core` and stay framework-agnostic (no React dependency).
+- `packages/i18n` only exports static resources (JSON + types) and never creates its own i18next instance; consuming apps register it as the `common` namespace in their own `i18n.init()`.
+- `apps/demo` is a single Expo app used for both native and web testing; there is no separate web demo.
+- Consumers pull this repo in as a git submodule (QuranApp does). Don't start integrating it into other projects on your own.
+- `packages/firebase` (`@msarinc/firebase`): Firebase app/auth/Firestore setup, Google sign-in (`AuthProvider` / `useAuth`) and generic Firestore helpers (`useFirestoreCollection`, `addFirestoreDoc`, ...). It holds no config of its own: each app calls `initFirebase(loadFirebaseConfigFromEnv())` with its own `EXPO_PUBLIC_FIREBASE_*` / `EXPO_PUBLIC_GOOGLE_*` values.
+- `packages/supabase` (`@msarinc/supabase`): first step of a gradual Firebase → Supabase move. Storage only for now (`initSupabase`, `uploadImage`, `deleteImage`); auth and data are still on Firebase. Config comes from the app's `EXPO_PUBLIC_SUPABASE_*` values.
 
-## Komutlar
+## Commands
 
 ```bash
 npm install
-npm run dev        # core+i18n+ui watch build + Expo dev server (concurrently)
-npm run build       # tüm workspace'leri build eder
-npm run typecheck   # tüm workspace'lerde tsc --noEmit
+npm run dev         # watch-build core + i18n + ui and start the Expo dev server
+npm run build       # build every workspace
+npm run typecheck   # tsc --noEmit in every workspace
 ```
 
-## Monorepo + Expo tuzağı
+## Monorepo + Expo pitfall
 
-`apps/demo`'nun `main` alanı `./index.js`'dir, `node_modules/expo/AppEntry.js` **değil**. npm workspaces `expo` paketini kök `node_modules`'e hoist ettiği için, `AppEntry.js` içindeki göreli `../../App` importu yanlış dizine (repo köküne) çözülüyordu. Kendi `index.js` (`registerRootComponent(App)`) bunu çözüyor. Yeni bir Expo app eklenirse aynı deseni kullan.
+`apps/demo` uses `./index.js` as its `main`, **not** `node_modules/expo/AppEntry.js`. npm workspaces hoist `expo` to the root `node_modules`, so the relative `../../App` import inside `AppEntry.js` resolved to the repo root. The local `index.js` (`registerRootComponent(App)`) avoids that; use the same pattern for any new Expo app.
 
-## Kod stili
+## Code style
 
-- Yorum yazma alışkanlığını minimumda tut: sadece WHY'ı açıklayan, non-obvious yorumlar ekle (bkz. üst seviye CLAUDE talimatları). JSDoc'u sadece prop/parametre davranışı isimden anlaşılmıyorsa kullan.
-- `packages/*` içindeki paketler `tsup` ile build edilir, `dist/` gitignore'da — build çıktısını commit'leme.
+- Keep comments to a minimum: only non-obvious "why" comments. Use JSDoc only when a prop or parameter's behavior isn't clear from its name.
+- Comments, docs and error messages are in English.
+- Packages under `packages/*` are built with `tsup`; `dist/` is gitignored, never commit build output.

@@ -7,15 +7,14 @@ import { SHADOW } from './createBaseStyles';
 
 export interface HeaderMenuProps {
   accessibilityLabel: string;
-  /** Dilin içinde alt alta dizilecek kontroller. */
   children: React.ReactNode;
-  /** Kapalıyken tuşta görünen ikon. Varsayılan: SlidersHorizontal. */
+  /** Icon shown while closed. Default: SlidersHorizontal. */
   icon?: LucideIcon;
 }
 
 const TRIGGER_SIZE = 36;
 
-/** Tek bir header tuşu; basınca dil gibi aşağı uzar ve verilen kontrolleri alt alta gösterir. Dışarı dokununca kapanır. */
+/** A single header button that slides down into a tab stacking its children. Tapping outside closes it. */
 export default function HeaderMenu({ accessibilityLabel, children, icon: Icon = SlidersHorizontal }: HeaderMenuProps) {
   const { colors } = useTheme();
   const { width: windowWidth } = useWindowDimensions();

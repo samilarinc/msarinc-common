@@ -14,10 +14,7 @@ export interface GoogleClientIds {
   android?: string;
 }
 
-/**
- * Her uygulama kendi Firebase projesine ait değerleri process.env üzerinden
- * aynı EXPO_PUBLIC_FIREBASE_* isimleriyle sağlar (bkz. .env.example).
- */
+/** Each app provides its own Firebase project through the same EXPO_PUBLIC_FIREBASE_* variables. */
 export function loadFirebaseConfigFromEnv(): FirebaseEnvConfig {
   return {
     apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,

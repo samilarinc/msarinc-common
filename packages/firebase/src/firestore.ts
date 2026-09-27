@@ -23,7 +23,6 @@ export interface UseFirestoreCollectionResult<T> {
   loading: boolean;
 }
 
-/** Bir koleksiyonu gerçek zamanlı dinler (örn. yorumlar, anı defteri kayıtları). */
 export function useFirestoreCollection<T = DocumentData>(
   path: string,
   options?: UseFirestoreCollectionOptions
@@ -46,7 +45,7 @@ export function useFirestoreCollection<T = DocumentData>(
   return { data, loading };
 }
 
-/** createdAt sunucu zaman damgasıyla otomatik eklenir. */
+/** Adds createdAt as a server timestamp. */
 export async function addFirestoreDoc<T extends object>(path: string, data: T) {
   const { db } = getFirebaseClient();
   return addDoc(collection(db, path), { ...data, createdAt: serverTimestamp() });

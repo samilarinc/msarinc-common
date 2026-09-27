@@ -11,9 +11,9 @@ export interface LanguageSelectorProps {
   value: string;
   languages: LanguageOption[];
   onChange: (code: string) => void;
-  /** Belirtilmezse genişliğe göre otomatik seçilir (bkz. breakpoint). */
+  /** Chosen from the window width when omitted (see breakpoint). */
   compact?: boolean;
-  /** compact otomatik seçilirken kullanılan genişlik eşiği (px). Varsayılan: 640. */
+  /** Width in px below which compact is used automatically. Default: 640. */
   breakpoint?: number;
 }
 

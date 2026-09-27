@@ -20,7 +20,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export interface ThemeProviderProps {
   children: ReactNode;
   defaultTheme?: ThemeName;
-  /** Tüketen proje kendi marka paletini vermek isterse (bkz. ciphereng-frontend). Verilmezse theme-core'un PALETTES'i kullanılır. */
+  /** The app's own brand palettes. Default: PALETTES from @msarinc/theme-core. */
   palettes?: Record<ThemeName, Palette>;
 }
 
