@@ -1,53 +1,46 @@
-import { PALETTES, Palette, ThemeName, isThemeName } from './palettes';
+import { ThemePreference, isThemePreference } from './palettes';
 
 export interface ThemeStorageAdapter {
-  get(): ThemeName | null | Promise<ThemeName | null>;
-  set(theme: ThemeName): void | Promise<void>;
+  get(): ThemePreference | null | Promise<ThemePreference | null>;
+  set(preference: ThemePreference): void | Promise<void>;
 }
 
 export interface ThemeStoreOptions {
   storage: ThemeStorageAdapter;
-  defaultTheme?: ThemeName;
-  onChange: (theme: ThemeName, colors: Palette) => void;
+  defaultPreference?: ThemePreference;
+  onChange: (preference: ThemePreference) => void;
 }
 
 export interface ThemeStore {
-  getTheme(): ThemeName;
-  setTheme(theme: ThemeName): void | Promise<void>;
-  getColors(): Palette;
+  getPreference(): ThemePreference;
+  setPreference(preference: ThemePreference): void | Promise<void>;
   hydrate(): void | Promise<void>;
 }
 
+// The store only knows the preference: turning 'system' into a concrete theme needs the
+// device's color scheme, which is the UI layer's job (see resolveTheme).
 export function createThemeStore(options: ThemeStoreOptions): ThemeStore {
   const { storage, onChange } = options;
-  let current: ThemeName = options.defaultTheme ?? 'light';
+  let current: ThemePreference = options.defaultPreference ?? 'light';
 
-  const setTheme = (theme: ThemeName) => {
-    current = theme;
-    onChange(current, PALETTES[current]);
-    return storage.set(theme);
+  const apply = (saved: unknown) => {
+    if (isThemePreference(saved)) {
+      current = saved;
+      onChange(current);
+    }
+  };
+
+  const setPreference = (preference: ThemePreference) => {
+    current = preference;
+    onChange(current);
+    return storage.set(preference);
   };
 
   const hydrate = () => {
     const result = storage.get();
-    if (result instanceof Promise) {
-      return result.then((saved) => {
-        if (isThemeName(saved)) {
-          current = saved;
-          onChange(current, PALETTES[current]);
-        }
-      });
-    }
-    if (isThemeName(result)) {
-      current = result;
-      onChange(current, PALETTES[current]);
-    }
+    if (result instanceof Promise) return result.then(apply);
+    apply(result);
   };
 
-  return {
-    getTheme: () => current,
-    setTheme,
-    getColors: () => PALETTES[current],
-    hydrate,
-  };
+  return { getPreference: () => current, setPreference, hydrate };
 }

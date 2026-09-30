@@ -2,6 +2,11 @@ export type ThemeName = 'light' | 'dark' | 'lights-out';
 
 export const THEME_NAMES: ThemeName[] = ['light', 'dark', 'lights-out'];
 
+/** What the user picked; 'system' follows the device's light/dark setting. */
+export type ThemePreference = ThemeName | 'system';
+
+export const THEME_PREFERENCES: ThemePreference[] = ['system', ...THEME_NAMES];
+
 export type Palette = {
   background: string;
   text: string;
@@ -57,4 +62,13 @@ export const PALETTES: Record<ThemeName, Palette> = {
 
 export function isThemeName(value: unknown): value is ThemeName {
   return value === 'light' || value === 'dark' || value === 'lights-out';
+}
+
+export function isThemePreference(value: unknown): value is ThemePreference {
+  return value === 'system' || isThemeName(value);
+}
+
+export function resolveTheme(preference: ThemePreference, systemScheme: string | null | undefined): ThemeName {
+  if (preference !== 'system') return preference;
+  return systemScheme === 'dark' ? 'dark' : 'light';
 }

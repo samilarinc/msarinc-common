@@ -1,5 +1,6 @@
 {
   "theme": {
+    "system": "System",
     "light": "Light",
     "dark": "Dark",
     "lights_out": "Lights Out",

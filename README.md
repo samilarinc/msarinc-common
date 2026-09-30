@@ -71,9 +71,18 @@ function Screen() {
 }
 ```
 
-The selected theme is persisted with AsyncStorage. Apps with their own brand colors can pass
+The selected preference is persisted with AsyncStorage. Apps with their own brand colors can pass
 `palettes` to `ThemeProvider`. Toggles such as `ThemeToggle` and `LanguageSelector` switch to a
 compact single button below 640px; set `compact` or `breakpoint` to override this.
+
+`useTheme()` returns `theme` (the theme in effect: `light`, `dark` or `lights-out`), `preference`
+(what the user picked, which may also be `system`) and `setTheme(preference)`.
+
+To follow the device's light/dark setting, pass `defaultTheme="system"` to `ThemeProvider` and
+`includeSystem` to `ThemeToggle` (label via `labels.system`). On native, keyboards and system
+dialogs follow the app theme; on web, `theme-color`, the page background and `color-scheme` are
+kept in sync. `waitUntilHydrated` delays rendering until the saved preference is read, which avoids
+a flash of the wrong theme at startup.
 
 ### Localization
 

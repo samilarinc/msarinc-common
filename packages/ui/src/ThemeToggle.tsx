@@ -1,16 +1,18 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
-import { Sun, Moon, Zap, type LucideIcon } from 'lucide-react-native';
-import { ThemeName } from '@msarinc/theme-core';
+import { Sun, Moon, Zap, SunMoon, type LucideIcon } from 'lucide-react-native';
+import { ThemePreference } from '@msarinc/theme-core';
 import { useTheme } from './ThemeProvider';
 
-const THEME_ICONS: { name: ThemeName; Icon: LucideIcon }[] = [
+const THEME_ICONS: { name: ThemePreference; Icon: LucideIcon }[] = [
+  { name: 'system', Icon: SunMoon },
   { name: 'light', Icon: Sun },
   { name: 'dark', Icon: Moon },
   { name: 'lights-out', Icon: Zap },
 ];
 
 export interface ThemeToggleLabels {
+  system: string;
   light: string;
   dark: string;
   lightsOut: string;
@@ -18,6 +20,7 @@ export interface ThemeToggleLabels {
 }
 
 const DEFAULT_LABELS: ThemeToggleLabels = {
+  system: 'System',
   light: 'Light',
   dark: 'Dark',
   lightsOut: 'Lights Out',
@@ -29,23 +32,25 @@ export interface ThemeToggleProps {
   compact?: boolean;
   /** Width in px below which compact is used automatically. Default: 640. */
   breakpoint?: number;
+  /** Adds a 'System' option that follows the device's light/dark setting. Default: false. */
+  includeSystem?: boolean;
   labels?: Partial<ThemeToggleLabels>;
 }
 
-export default function ThemeToggle({ compact, breakpoint = 640, labels }: ThemeToggleProps) {
-  const { theme, setTheme, colors } = useTheme();
+export default function ThemeToggle({ compact, breakpoint = 640, includeSystem = false, labels }: ThemeToggleProps) {
+  const { preference, setTheme, colors } = useTheme();
   const { width } = useWindowDimensions();
   const isCompact = compact ?? width < breakpoint;
   const resolvedLabels = { ...DEFAULT_LABELS, ...labels };
 
-  const OPTIONS = THEME_ICONS.map((o) => ({
+  const LABEL_KEYS = { system: 'system', light: 'light', dark: 'dark', 'lights-out': 'lightsOut' } as const;
+  const OPTIONS = THEME_ICONS.filter((o) => includeSystem || o.name !== 'system').map((o) => ({
     ...o,
-    label:
-      o.name === 'light' ? resolvedLabels.light : o.name === 'dark' ? resolvedLabels.dark : resolvedLabels.lightsOut,
+    label: resolvedLabels[LABEL_KEYS[o.name]],
   }));
 
   if (isCompact) {
-    const currentIndex = OPTIONS.findIndex((o) => o.name === theme);
+    const currentIndex = Math.max(0, OPTIONS.findIndex((o) => o.name === preference));
     const current = OPTIONS[currentIndex];
     const next = OPTIONS[(currentIndex + 1) % OPTIONS.length];
 
@@ -63,7 +68,7 @@ export default function ThemeToggle({ compact, breakpoint = 640, labels }: Theme
   return (
     <View style={[styles.container, { backgroundColor: colors.surface, borderColor: colors.border }]}>
       {OPTIONS.map(({ name, Icon, label }) => {
-        const active = theme === name;
+        const active = preference === name;
         return (
           <TouchableOpacity
             key={name}

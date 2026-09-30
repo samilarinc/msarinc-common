@@ -27,7 +27,9 @@ function Demo() {
             onChange={(code) => i18n.changeLanguage(code)}
           />
           <ThemeToggle
+            includeSystem
             labels={{
+              system: tc('theme.system'),
               light: tc('theme.light'),
               dark: tc('theme.dark'),
               lightsOut: tc('theme.lights_out'),
@@ -61,7 +63,7 @@ function Demo() {
 
 export default function App() {
   return (
-    <ThemeProvider>
+    <ThemeProvider defaultTheme="system" waitUntilHydrated>
       <Demo />
     </ThemeProvider>
   );
