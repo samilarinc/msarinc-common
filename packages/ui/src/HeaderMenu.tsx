@@ -9,6 +9,7 @@ import {
   StyleSheet,
   useWindowDimensions,
 } from 'react-native';
+import { createPortal } from 'react-dom';
 import { SlidersHorizontal, X, type LucideIcon } from 'lucide-react-native';
 import { SPACING } from '@msarinc/theme-core';
 import { useTheme } from './ThemeProvider';
@@ -51,6 +52,8 @@ export default function HeaderMenu({ accessibilityLabel, children, icon: Icon = 
   const isWeb = Platform.OS === 'web';
 
   // On web the menu is a plain fixed panel (no Modal), so the page keeps scrolling; any press outside it closes it.
+  // It is portaled to <body>: react-native-web gives every View its own stacking context, so inside the header
+  // it would sit under anything rendered after the header (floating buttons, bars).
   useEffect(() => {
     if (!isWeb || !anchor) return;
     type DomNode = { contains(other: unknown): boolean };
@@ -84,7 +87,7 @@ export default function HeaderMenu({ accessibilityLabel, children, icon: Icon = 
           right: anchor!.right,
           backgroundColor: colors.primary,
         },
-        position && ({ position, zIndex: 1000 } as object),
+        position && ({ position, zIndex: 2147483647 } as object),
       ]}
     >
       <TouchableOpacity
@@ -123,7 +126,7 @@ export default function HeaderMenu({ accessibilityLabel, children, icon: Icon = 
       </TouchableOpacity>
 
       {isWeb ? (
-        anchor && renderTongue('fixed')
+        anchor && createPortal(renderTongue('fixed'), (globalThis as unknown as { document: { body: Element } }).document.body)
       ) : (
         <Modal visible={!!anchor} transparent animationType="none" onRequestClose={close} statusBarTranslucent>
           <Pressable style={StyleSheet.absoluteFill} onPress={close} />
