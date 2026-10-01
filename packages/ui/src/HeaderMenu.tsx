@@ -1,5 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, TouchableOpacity, Pressable, Modal, Animated, StyleSheet, useWindowDimensions } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Pressable,
+  Modal,
+  Animated,
+  Platform,
+  StyleSheet,
+  useWindowDimensions,
+} from 'react-native';
 import { SlidersHorizontal, X, type LucideIcon } from 'lucide-react-native';
 import { SPACING } from '@msarinc/theme-core';
 import { useTheme } from './ThemeProvider';
@@ -25,7 +34,11 @@ export default function HeaderMenu({ accessibilityLabel, children, icon: Icon = 
   useEffect(() => {
     if (!anchor) return;
     slide.setValue(0);
-    Animated.timing(slide, { toValue: 1, duration: 180, useNativeDriver: true }).start();
+    Animated.timing(slide, {
+      toValue: 1,
+      duration: 180,
+      useNativeDriver: true,
+    }).start();
   }, [anchor, slide]);
 
   const open = () => {
@@ -34,8 +47,74 @@ export default function HeaderMenu({ accessibilityLabel, children, icon: Icon = 
     });
   };
   const close = () => setAnchor(null);
+  const tongueRef = useRef<View>(null);
+  const isWeb = Platform.OS === 'web';
+
+  // On web the menu is a plain fixed panel (no Modal), so the page keeps scrolling; any press outside it closes it.
+  useEffect(() => {
+    if (!isWeb || !anchor) return;
+    type DomNode = { contains(other: unknown): boolean };
+    const doc = (
+      globalThis as unknown as {
+        document: {
+          addEventListener(type: string, fn: (e: { target: unknown }) => void): void;
+          removeEventListener(type: string, fn: (e: { target: unknown }) => void): void;
+        };
+      }
+    ).document;
+    const onPointerDown = (e: { target: unknown }) => {
+      const node = tongueRef.current as unknown as DomNode | null;
+      const trigger = triggerRef.current as unknown as DomNode | null;
+      if (node?.contains(e.target) || trigger?.contains(e.target)) return;
+      setAnchor(null);
+    };
+    doc.addEventListener('pointerdown', onPointerDown);
+    return () => doc.removeEventListener('pointerdown', onPointerDown);
+  }, [isWeb, anchor]);
 
   const triggerStyle = [styles.trigger, { backgroundColor: colors.surface, borderColor: colors.border }];
+
+  const renderTongue = (position?: 'fixed') => (
+    <View
+      ref={tongueRef}
+      style={[
+        styles.tongue,
+        {
+          top: anchor!.top,
+          right: anchor!.right,
+          backgroundColor: colors.primary,
+        },
+        position && ({ position, zIndex: 1000 } as object),
+      ]}
+    >
+      <TouchableOpacity
+        accessibilityLabel={accessibilityLabel}
+        accessibilityState={{ expanded: true }}
+        onPress={close}
+        style={triggerStyle}
+      >
+        <X size={18} color={colors.primary} />
+      </TouchableOpacity>
+      <Animated.View
+        style={[
+          styles.items,
+          {
+            opacity: slide,
+            transform: [
+              {
+                translateY: slide.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-TRIGGER_SIZE, 0],
+                }),
+              },
+            ],
+          },
+        ]}
+      >
+        {children}
+      </Animated.View>
+    </View>
+  );
 
   return (
     <>
@@ -43,32 +122,14 @@ export default function HeaderMenu({ accessibilityLabel, children, icon: Icon = 
         <Icon size={18} color={colors.primary} />
       </TouchableOpacity>
 
-      <Modal visible={!!anchor} transparent animationType="none" onRequestClose={close} statusBarTranslucent>
-        <Pressable style={StyleSheet.absoluteFill} onPress={close} />
-        {anchor && (
-          <View style={[styles.tongue, { top: anchor.top, right: anchor.right, backgroundColor: colors.primary }]}>
-            <TouchableOpacity
-              accessibilityLabel={accessibilityLabel}
-              accessibilityState={{ expanded: true }}
-              onPress={close}
-              style={triggerStyle}
-            >
-              <X size={18} color={colors.primary} />
-            </TouchableOpacity>
-            <Animated.View
-              style={[
-                styles.items,
-                {
-                  opacity: slide,
-                  transform: [{ translateY: slide.interpolate({ inputRange: [0, 1], outputRange: [-TRIGGER_SIZE, 0] }) }],
-                },
-              ]}
-            >
-              {children}
-            </Animated.View>
-          </View>
-        )}
-      </Modal>
+      {isWeb ? (
+        anchor && renderTongue('fixed')
+      ) : (
+        <Modal visible={!!anchor} transparent animationType="none" onRequestClose={close} statusBarTranslucent>
+          <Pressable style={StyleSheet.absoluteFill} onPress={close} />
+          {anchor && renderTongue()}
+        </Modal>
+      )}
     </>
   );
 }
