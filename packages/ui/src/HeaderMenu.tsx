@@ -43,9 +43,12 @@ export default function HeaderMenu({ accessibilityLabel, children, icon: Icon = 
   }, [anchor, slide]);
 
   const open = () => {
-    triggerRef.current?.measureInWindow((x, y, width) => {
-      setAnchor({ top: y, right: windowWidth - (x + width) });
-    });
+    const place = (x: number, y: number, width: number) => setAnchor({ top: y, right: windowWidth - (x + width) });
+    if (Platform.OS === 'web') {
+      triggerRef.current?.measureInWindow(place);
+    } else {
+      triggerRef.current?.measure((_x, _y, width, _height, pageX, pageY) => place(pageX, pageY, width));
+    }
   };
   const close = () => setAnchor(null);
   const tongueRef = useRef<View>(null);
