@@ -24,6 +24,8 @@ export interface AboutProfile {
   avatar: string | ImageSourcePropType;
   name: string;
   role: string;
+  /** Optional highlighted link (e.g. a donation page) shown as a button under the role. */
+  support?: AboutContact;
   contacts: AboutContact[];
 }
 
@@ -57,6 +59,17 @@ export default function AboutScreen({ profile, sections }: AboutScreenProps) {
         />
         <Text style={styles.name}>{profile.name}</Text>
         <Text style={styles.role}>{profile.role}</Text>
+
+        {profile.support && (
+          <TouchableOpacity
+            style={styles.supportButton}
+            onPress={() => Linking.openURL(profile.support!.url)}
+            activeOpacity={0.8}
+          >
+            <profile.support.icon color={colors.white} size={16} style={styles.infoIcon} />
+            <Text style={styles.supportText}>{profile.support.label}</Text>
+          </TouchableOpacity>
+        )}
 
         <View style={styles.divider} />
 
@@ -120,6 +133,16 @@ const getStyles = (colors: Palette) =>
     avatar: { width: 72, height: 72, borderRadius: 18, marginBottom: 12 },
     name: { fontSize: 18, fontWeight: '700', color: colors.text, textAlign: 'center' },
     role: { fontSize: 14, fontWeight: '500', color: colors.textMuted, marginTop: 2 },
+    supportButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.primary,
+      borderRadius: 999,
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+      marginTop: 14,
+    },
+    supportText: { fontSize: 14, fontWeight: '600', color: colors.white },
     divider: {
       width: '100%',
       height: 1,
