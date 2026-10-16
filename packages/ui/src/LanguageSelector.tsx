@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import { useTheme } from './ThemeProvider';
+import { shadow } from './shadow';
 
 export interface LanguageOption {
   code: string;
@@ -56,7 +57,7 @@ export default function LanguageSelector({
             key={lang.code}
             accessibilityLabel={lang.label}
             onPress={() => onChange(lang.code)}
-            style={[styles.button, active && { backgroundColor: colors.background, shadowColor: '#000' }]}
+            style={[styles.button, active && { backgroundColor: colors.background }]}
           >
             <Text style={[styles.code, { color: active ? colors.primary : colors.textMuted }]}>
               {lang.code.toUpperCase()}
@@ -84,10 +85,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 6,
-    elevation: 2,
+    ...shadow({ opacity: 0.12, radius: 6, offset: { width: 0, height: 2 }, elevation: 2 }),
   },
   compactButton: {
     minWidth: 36,

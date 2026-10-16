@@ -1,5 +1,6 @@
 import { Platform, StyleSheet, ViewStyle } from 'react-native';
 import { FONT_SIZES, RADIUS, SPACING, type Palette } from '@msarinc/theme-core';
+import { shadow } from './shadow';
 
 // Deliberately minimal so each app can map its own theme shape onto it.
 export interface BaseStyleColors {
@@ -29,20 +30,8 @@ const webFixedFill = Platform.select<ViewStyle>({
 });
 
 export const SHADOW = {
-  sm: {
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-  },
-  md: {
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-  },
+  sm: shadow({ opacity: 0.1, radius: 3, offset: { width: 0, height: 1 }, elevation: 2 }),
+  md: shadow({ opacity: 0.25, radius: 4, offset: { width: 0, height: 2 }, elevation: 5 }),
 } as const;
 
 export const createBaseStyles = (c: BaseStyleColors) => StyleSheet.create({

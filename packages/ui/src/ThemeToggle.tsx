@@ -3,6 +3,7 @@ import { View, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-n
 import { Sun, Moon, Zap, SunMoon, type LucideIcon } from 'lucide-react-native';
 import { ThemePreference } from '@msarinc/theme-core';
 import { useTheme } from './ThemeProvider';
+import { shadow } from './shadow';
 
 const THEME_ICONS: { name: ThemePreference; Icon: LucideIcon }[] = [
   { name: 'system', Icon: SunMoon },
@@ -74,7 +75,7 @@ export default function ThemeToggle({ compact, breakpoint = 640, includeSystem =
             key={name}
             accessibilityLabel={label}
             onPress={() => setTheme(name)}
-            style={[styles.button, active && { backgroundColor: colors.background, shadowColor: '#000' }]}
+            style={[styles.button, active && { backgroundColor: colors.background }]}
           >
             <Icon size={18} color={active ? colors.primary : colors.textMuted} />
           </TouchableOpacity>
@@ -99,10 +100,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 6,
-    elevation: 2,
+    ...shadow({ opacity: 0.12, radius: 6, offset: { width: 0, height: 2 }, elevation: 2 }),
   },
   compactButton: {
     width: 36,

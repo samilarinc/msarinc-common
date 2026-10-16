@@ -15,5 +15,7 @@ export type { HeaderMenuProps } from './HeaderMenu';
 export { PALETTES, THEME_NAMES, THEME_PREFERENCES } from '@msarinc/theme-core';
 export type { Palette, ThemeName, ThemePreference } from '@msarinc/theme-core';
 export { createBaseStyles, paletteToBaseStyleColors, SHADOW } from './createBaseStyles';
+export { shadow } from './shadow';
+export type { ShadowOptions } from './shadow';
 export type { BaseStyleColors, BaseStyles } from './createBaseStyles';
 export { SPACING, RADIUS, FONT_SIZES } from '@msarinc/theme-core';
