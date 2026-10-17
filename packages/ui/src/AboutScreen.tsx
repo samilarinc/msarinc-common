@@ -37,6 +37,8 @@ export interface AboutUpdate {
 export interface AboutSection {
   title: string;
   text?: string;
+  /** Links shown side by side under the text, e.g. the sites a section credits. */
+  links?: AboutContact[];
   updates?: AboutUpdate[];
 }
 
@@ -91,6 +93,22 @@ export default function AboutScreen({ profile, sections }: AboutScreenProps) {
           <Text style={styles.sectionTitle}>{section.title}</Text>
 
           {section.text && <Text style={styles.sectionText}>{section.text}</Text>}
+
+          {section.links && (
+            <View style={styles.linkRow}>
+              {section.links.map((link) => (
+                <TouchableOpacity
+                  key={link.url}
+                  style={styles.linkButton}
+                  onPress={() => Linking.openURL(link.url)}
+                  activeOpacity={0.7}
+                >
+                  <link.icon color={colors.primary} size={16} style={styles.infoIcon} />
+                  <Text style={styles.linkText}>{link.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
 
           {section.updates?.map((update) => (
             <View key={update.date} style={styles.updateItem}>
@@ -163,6 +181,17 @@ const getStyles = (colors: Palette) =>
     },
     sectionTitle: { fontSize: 15, fontWeight: '600', color: colors.text, marginBottom: 8 },
     sectionText: { fontSize: 14, color: colors.textMuted, lineHeight: 21 },
+    linkRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 14 },
+    linkButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 999,
+      paddingVertical: 8,
+      paddingHorizontal: 14,
+    },
+    linkText: { fontSize: 14, fontWeight: '600', color: colors.primary },
     updateItem: {
       marginBottom: 12,
       borderBottomWidth: 1,
