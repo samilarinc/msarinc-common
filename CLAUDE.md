@@ -6,6 +6,8 @@ Theme, i18n and UI library shared across msarinc's personal projects. npm worksp
 
 - **Expo / React Native only, no Vite/DOM package.** Consuming projects are moving to Expo, so the library is a single UI package (`packages/ui`) built on `react-native-web`. Don't suggest adding a separate web package.
 - Palettes and theme state logic live in `packages/core` and stay framework-agnostic (no React dependency).
+  Small framework-agnostic helpers shared between apps live there too: `buildShoppingLink` / `parseShoppingLink`
+  (the `nelazim://add` / `https://nelazim.msarinc.com.tr/add` link other apps use to hand NeLazim a shopping list).
 - `packages/i18n` only exports static resources (JSON + types) and never creates its own i18next instance; consuming apps register it as the `common` namespace in their own `i18n.init()`.
 - `apps/demo` is a single Expo app used for both native and web testing; there is no separate web demo.
 - Consumers pull this repo in as a git submodule (QuranApp does). Don't start integrating it into other projects on your own.

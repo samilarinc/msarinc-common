@@ -3,3 +3,5 @@ export { SPACING, RADIUS, FONT_SIZES } from './tokens';
 export type { Palette, ThemeName, ThemePreference } from './palettes';
 export { createThemeStore } from './createThemeStore';
 export type { ThemeStorageAdapter, ThemeStore, ThemeStoreOptions } from './createThemeStore';
+export { NELAZIM_WEB_ORIGIN, buildShoppingLink, parseShoppingLink } from './shoppingLink';
+export type { ShoppingLink, ShoppingLinkItem } from './shoppingLink';
