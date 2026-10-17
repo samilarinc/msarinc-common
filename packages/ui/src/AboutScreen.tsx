@@ -37,6 +37,8 @@ export interface AboutUpdate {
 export interface AboutSection {
   title: string;
   text?: string;
+  /** Justify the text to both edges. */
+  justify?: boolean;
   /** Links shown side by side under the text, e.g. the sites a section credits. */
   links?: AboutContact[];
   updates?: AboutUpdate[];
@@ -92,7 +94,9 @@ export default function AboutScreen({ profile, sections }: AboutScreenProps) {
         <View key={section.title} style={styles.section}>
           <Text style={styles.sectionTitle}>{section.title}</Text>
 
-          {section.text && <Text style={styles.sectionText}>{section.text}</Text>}
+          {section.text && (
+            <Text style={[styles.sectionText, section.justify && styles.justified]}>{section.text}</Text>
+          )}
 
           {section.links && (
             <View style={styles.linkRow}>
@@ -181,6 +185,7 @@ const getStyles = (colors: Palette) =>
     },
     sectionTitle: { fontSize: 15, fontWeight: '600', color: colors.text, marginBottom: 8 },
     sectionText: { fontSize: 14, color: colors.textMuted, lineHeight: 21 },
+    justified: { textAlign: 'justify' },
     linkRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 14 },
     linkButton: {
       flexDirection: 'row',
