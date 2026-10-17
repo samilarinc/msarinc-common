@@ -21,11 +21,19 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@supabase/supabase-js": "*"
+    "@supabase/supabase-js": "*",
+    "react-native": "*",
+    "@react-native-async-storage/async-storage": "*",
+    "expo-linking": "*",
+    "expo-web-browser": "*"
   },
   "devDependencies": {
     "@supabase/supabase-js": "^2.45.0",
     "tsup": "^8.3.5",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "@react-native-async-storage/async-storage": "^2.1.0",
+    "expo-linking": "*",
+    "expo-web-browser": "*",
+    "react-native": "*"
   }
 }

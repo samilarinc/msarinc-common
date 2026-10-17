@@ -11,7 +11,7 @@ native and on the web through `react-native-web`, so there is no separate DOM pa
 | `@msarinc/ui` | `packages/ui` | `ThemeProvider`, `ThemeToggle`, `LanguageSelector`, `FontSizeToggle`, `HeaderNavButtons`, `HeaderMenu`, `AboutScreen` and a base style kit (`createBaseStyles`). |
 | `@msarinc/i18n-common` | `packages/i18n` | Translation strings shared by every app (`tr`, `en`), exported as plain resources. |
 | `@msarinc/firebase` | `packages/firebase` | Firebase setup, Google sign-in (`AuthProvider`, `useAuth`) and Firestore helpers. |
-| `@msarinc/supabase` | `packages/supabase` | Supabase Storage helpers (`uploadImage`, `deleteImage`). |
+| `@msarinc/supabase` | `packages/supabase` | Supabase client, sign-in (Google, e-mail link, PKCE on web and native: `authClientOptions`, `signInWithGoogle`, `sendEmailSignInLink`, `listenForSignInLinks`) and Storage helpers (`uploadImage`, `deleteImage`). |
 
 `apps/demo` is an Expo app for trying the packages on a device or in the browser.
 
